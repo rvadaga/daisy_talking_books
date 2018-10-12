@@ -72,8 +72,11 @@
     <p></p>
     <div class="row" style="height: 15%">
       {% if page_position != 'last' and all_processed == 0 %}
-        <div class="col-lg-4"></div>
-        <div class="col-lg-1">
+        <div class="col-lg-4">
+            <button class="btn btn-primary" title="Fresh OCR output" id="fresh OCR" type="button" name="button">Reset OCR</button>
+        </div> 
+        <div class="col-lg-1"> 
+        <div class="c-lg-1">
             <button class="btn btn-primary" title="Save the xml output. "
                 id="savePage" type="button" name="button">Save</button>
         </div>
