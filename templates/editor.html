@@ -1,4 +1,4 @@
-33{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
 {% block content %}
 <div class="container-fluid" id="main-div">
@@ -43,11 +43,11 @@
             </div>
             <div class="row inner_row">
                 <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Pages
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">PAGE
                     <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu myDropDown">
                         {% for page in pages %} 
-                          <li class="unprocessed_pages"><a class="dropdown-page-number">{{ page }}</a></li>
+                          <li class="unprocessed_pages"><a class="dropdown-page-number" href="#">{{ page.page_number }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -75,7 +75,7 @@
         <div class="col-lg-4"></div>
         <div class="col-lg-1">
             <button class="btn btn-primary" title="Save the xml output. "
-                id="savePage" type="button" name="button">Save and Load next</button>
+                id="savePage" type="button" name="button">Save</button>
         </div>
         <div class="col-lg-7"></div>
         {% elif page_position == 'last' and all_processed == 0 %}

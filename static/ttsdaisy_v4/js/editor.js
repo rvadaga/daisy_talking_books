@@ -63,6 +63,7 @@ function load_data_to_editor(saveOption){
     var book_id = document.getElementById("hiddenBookId").value
     var page_number = document.getElementById("hiddenPageNumber").value
     var is_final_page = document.getElementById("isFinalPage").value
+    // var language = $('#id_language').find(":selected")[0].innerText
 
     if (is_final_page){
       console.log("This is the final page. No api call. ");
@@ -180,7 +181,7 @@ function get_data_through_api(bookid){
 
 function run_pipeline(bookname, xmldata, bookid) {
   console.log("running the pipeline now.. hold tight.. ");
-  url = "http://10.2.16.111:5000/run_daisy_pipeline/";
+  url = "http://localhost:5000/run_daisy_pipeline/";
   data = {'bookname': bookname, 'xmldata': xmldata, 'bookid': bookid};
   $.ajax({
       type:"POST",
@@ -199,7 +200,7 @@ function run_pipeline(bookname, xmldata, bookid) {
 
 function run_pipeline2(bookname, xmldata, bookid) {
   console.log("running the pipeline now.. hold tight.. ");
-  url = "http://10.2.16.111:5000/run_daisy_pipeline2/";
+  url = "http://localhost:5000/run_daisy_pipeline2/";
   data = {'bookname': bookname, 'xmldata': xmldata, 'bookid': bookid};
   $.ajax({
       type:"POST",
@@ -326,4 +327,12 @@ $("#convert").click(function() {
 
   console.log("pipeline successfully run, check the audio book back in sometime. ");
   window.location = "/user_home/";
+});
+
+//fuzzy search
+$('#fuzzOptionsList').fuzzyDropdown({
+  mainContainer: '#fuzzSearch',
+  arrowUpClass: 'fuzzArrowUp',
+  selectedClass: 'selected',
+  enableBrowserDefaultScroll: true
 });

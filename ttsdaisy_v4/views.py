@@ -250,11 +250,11 @@ def get_pre_loaded_xml(ocrtext, page_position, bookname, page_number=1):
         xmltext = xmlpage_int_start + "\n" + ocrtext + "\n" + xmlpage_int_end
     return xmltext
 
-def get_text_data_of_the_image(image, page_number, bookname, page_position='intermediate', media_url=''):
+def get_text_data_of_the_image(image, page_number, bookname, page_position='intermediate', media_url='', language='eng'):
     print("image: {} and media_url: {} ".format(image, media_url))
     input_image = media_url + image
-    output_path = "/home/vandna/data/tts_out"
-    payload = {"input_image": input_image, "output_path": output_path}
+    output_path = "/home/vandna/data/tts_out/"
+    payload = {"input_image": input_image, "output_path": output_path, "language": language}
     j = {"xml": "The OCR could not be completed, there has been some error. "}
     print("The payload is: ",payload)
     url = "http://127.0.0.1:5000/get_ocr_output"
@@ -307,6 +307,7 @@ def load_image_and_text(request):
     data = {}
     bookid = request.GET.get('bookid', '')
     save_option = request.GET.get('saveOption', '')
+    language = request.GET.get('language', '')
     print("SAVE OPTION", save_option)
     page_number = int(request.GET.get('page_number', ''))
     logger.debug("The current page loaded is: ",page_number)
@@ -319,6 +320,7 @@ def load_image_and_text(request):
     page_id = Upload.objects.filter(book__id=bookid, processed=False).order_by('page_number').values()[0]['id']
     logger.debug("The corresponding page_id is: {}".format(page_id))
     image = Upload.objects.filter(id=page_id).values('image')[0]['image']
+    language = Upload.objects.filter(id=page_id).values('language')[0]['language']
     media_url = settings.MEDIA_URL
     media_root = settings.MEDIA_ROOT + "/"
     logger.debug("The image path is: {}".format(image))
@@ -336,7 +338,7 @@ def load_image_and_text(request):
     print("This page is: ",page_position)
     print("page number: {}, count: {}".format(page_number, count))
     bookname = get_bookname_from_id(bookid)
-    test_text = get_text_data_of_the_image(image, page_number, bookname, page_position)
+    test_text = get_text_data_of_the_image(image, page_number, bookname, page_position, language=language)
     print("Finished getting the text data for the image. ")
 
     if len(test_text):
