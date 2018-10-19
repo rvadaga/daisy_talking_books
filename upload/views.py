@@ -11,6 +11,9 @@ from .models import Book, Upload
 import zipfile, os, random
 from . import forms
 
+#specific for python3.x
+import requests
+
 def replace_space_with_underscore(string):
     return '_'.join(string.split(' '))
 
@@ -64,6 +67,14 @@ def add_book(request):
                 upload.title = title
                 upload.page_number = page_number
                 # page_number += 1
+                #generate raw OCR before save
+                session = requests.Session()
+                session.trust_env = False
+                data = {"image":f,"language":lang}
+                r = session.post("http://127.0.0.21:5000/get_ocr_output"\
+                    ,data = data)
+                print("Response: ", r.content.decode())
+
                 upload.save()
             print("All images in '{}' have been saved".format(book))
             return HttpResponseRedirect("/user_home")
@@ -72,6 +83,11 @@ def add_book(request):
         form = forms.AddBookForm()
     context = {'form': form}
     context.update(csrf(request))
+#######################vandna's edit
+    
+        # get_ocr_output()
+#######################vandna's edit
+
     return render(request, 'add_book.html', context)
 
 def get_page_number(book_name):

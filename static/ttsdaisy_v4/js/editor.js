@@ -109,6 +109,40 @@ function load_data_to_editor(saveOption){
       });
 }
 
+/////////////////////////////////////vandna's edit
+
+function jummper(page_number){
+     // get the id of the book here
+    var book_id = document.getElementById("hiddenBookId").value
+    //var clicked_value = document.getElementById("hiddenPageNumber").value
+    
+
+    // do a get call and get the latest page from db
+    // store image and text and load them on the editor
+    url = "/get_page_ocr/?bookid=" + book_id + '&page_number=' + page_number 
+    console.log("URL is: " + url);
+    $.ajax({
+        type:"GET",
+        url: url,
+        async: false,
+        cache: false,
+        timeout: 30000,
+        success: function (response){
+          var text = response.text
+          var image = response.image
+          // final_url = media_url + image_url
+          $('#image_drom_db').attr('src', image);
+          var editor = ace.edit("editor");
+          editor.setValue(text);
+        },
+        error: function(errorThrown){
+          swal("OOPS!","Looks like there was an error: " + errorThrown, "error");
+        }
+      });
+}
+
+////////////////////////////////////vandna's edit
+
 function load_full_xml_to_editor(saveOption){
   // get the id of the book here
   var book_name = document.getElementById("hiddenBookName").value
@@ -294,9 +328,9 @@ $(".dropdown-page-number").click(function(){
   // var bookid = get_bookid();
   // var pagenumber = get_pagenumber();
   //save_current_page(bookid, pagenumber, xmldata);
-
+  page_number = $(this)[0].innerText
   // call load_data_to_editor
-  //load_data_to_editor("save");
+  jummper(page_number);
 });
 
 
@@ -329,10 +363,3 @@ $("#convert").click(function() {
   window.location = "/user_home/";
 });
 
-//fuzzy search
-$('#fuzzOptionsList').fuzzyDropdown({
-  mainContainer: '#fuzzSearch',
-  arrowUpClass: 'fuzzArrowUp',
-  selectedClass: 'selected',
-  enableBrowserDefaultScroll: true
-});

@@ -16,6 +16,8 @@ urlpatterns = [
     url(r"^upload/", include("upload.urls", namespace="uploads")),
     url(r"^edit/(?P<pk>\d+)/$", views.EditorPage.as_view(), name="edit"),
     url(r"^edit/$", views.EditorPage.as_view(), name="editor"),
+    url(r"^get_page_ocr/$", views.get_page_ocr, name="get_page_ocr"),
+    url(r"^get_page_ocr/(?P<pk>\d+)/$", views.get_page_ocr, name="get_page_ocr"),
     url(r"^single_page/(?P<pk>\d+)", views.SingleEditorPage.as_view(), name="single_page"),
 
     url(r"^download/", views.download, name="download"),

@@ -202,7 +202,7 @@ def get_pre_loaded_xml(ocrtext, page_position, bookname, page_number=1):
         <meta name="dtb:uid" content="AUTO-UID-0239"/>
         <meta name="dt:version" content="2.0.0.0 Beta"/>
         <meta name="dc:Title" content="{}"/>
-        <meta name="dc:Creator" content="Vikram"/>
+        <meta name="dc:Creator" content="Vandna"/>
         <meta name="dc:Date" content="2018-05-08"/>
         <meta name="dc:Publisher" content="IIIT"/>
         <meta name="dc:Identifier" content="AUTO-UID-0239"/>
@@ -211,7 +211,7 @@ def get_pre_loaded_xml(ocrtext, page_position, bookname, page_number=1):
     <book showin="blp">
         <frontmatter>
           <doctitle>{}</doctitle>
-          <docauthor>Vikram</docauthor>
+          <docauthor>Vandna</docauthor>
         </frontmatter>
         <bodymatter id="bodymatter_0239">
         <level1>
@@ -355,6 +355,27 @@ def load_image_and_text(request):
 
     mimetype = 'application/json'
     return HttpResponse(json.dumps(context), mimetype)
+
+def get_page_ocr(request):
+    bookid = request.GET.get("bookid","")
+    page_number = int(request.GET.get('page_number', ''))
+    context = {}
+    processed_flag = Upload.objects.filter(book_id=bookid, page_number=page_number).values("processed")[0]["processed"]
+
+    if processed_flag == True:
+        #fetch xml file here
+        xml_output = Upload.objects.filter(page_number=page_number,book_id=bookid).values('xmldata')[0]["xmldata"]
+        context["text"]=xml_output
+    else:
+        #fetch ocr result column and attach book related tags
+        ocr_output = Upload.objects.filter(page_number=page_number,book_id=bookid).values('ocr_output')[0]["ocr_output"]
+        context["text"]=ocr_output
+    page_image = Upload.objects.filter(page_number=page_number,book_id=bookid).values('image')[0]["image"]
+    context["image"]=page_image
+    mimetype = 'application/json'
+    return HttpResponse(json.dumps(context), mimetype)
+
+
 
 def get_page_xml(bookid, page_number):
     page_xml = ''

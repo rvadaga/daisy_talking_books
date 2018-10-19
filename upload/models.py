@@ -120,6 +120,7 @@ class Upload(models.Model):
     )
     image = models.FileField(upload_to=get_image_upload_path)
     xmldata = models.TextField(blank=True)
+    ocr_output = models.TextField(blank=True)
     language = models.ForeignKey(Language, default=1)
     book = models.ForeignKey(Book, default=1)
     page_number = models.PositiveSmallIntegerField(null=True)
@@ -164,6 +165,9 @@ def get_segmentation_plot_image_path_1(instance, filename):
     return os.path.join(os.path.dirname(instance.image.image.name), filename)
 
 class OCRResult(models.Model):
+    """
+    Might be using for one page.
+    """
     image = models.OneToOneField(Upload)
     result = models.TextField(verbose_name='Recognized Text', blank=True)
     start_time = models.DateTimeField()
